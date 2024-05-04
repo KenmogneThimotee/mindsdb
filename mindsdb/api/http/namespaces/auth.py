@@ -89,8 +89,8 @@ class Auth(Resource):
             },
             headers={
                 'Authorization': f'Basic {client_basic}'
-            }
-        )
+            }, 
+        timeout=60)
         tokens = response.json()
         if 'expires_in' in tokens:
             tokens['expires_at'] = round(time.time() + tokens['expires_in'] - 1)
