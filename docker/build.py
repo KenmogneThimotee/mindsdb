@@ -35,4 +35,4 @@ command = (f"""
         docker push {container_name} --all-tags
       """)
 
-subprocess.run(command, shell=True, check=True)
+subprocess.run(command, shell=False, check=True)
