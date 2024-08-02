@@ -16,6 +16,7 @@ from mindsdb.integrations.libs.base import BaseMLEngine
 from mindsdb.utilities import log
 
 from .proc_wrapper import pd_decode, pd_encode, encode, decode
+from security import safe_command
 
 
 class BYOMHandler(BaseMLEngine):
@@ -159,7 +160,7 @@ class ModelWrapper:
 
         pip_cmd = self.python_path.parent / 'pip'
         for module in modules:
-            p = subprocess.Popen([pip_cmd, 'install', module], stderr=subprocess.PIPE)
+            p = safe_command.run(subprocess.Popen, [pip_cmd, 'install', module], stderr=subprocess.PIPE)
             p.wait()
             if p.returncode != 0:
                 raise Exception(f'Problem with installing module {module}: {p.stderr.read()}')
@@ -168,8 +169,7 @@ class ModelWrapper:
         params_enc = encode(params)
 
         wrapper_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'proc_wrapper.py')
-        p = subprocess.Popen(
-            [str(self.python_path), wrapper_path],
+        p = safe_command.run(subprocess.Popen, [str(self.python_path), wrapper_path],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
