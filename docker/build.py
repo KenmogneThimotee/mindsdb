@@ -1,8 +1,8 @@
 #!/bin/env python3
 
 import sys
-import requests
 import subprocess
+from security import safe_requests
 
 
 if not sys.argv[1:]:
@@ -12,7 +12,7 @@ reltype = sys.argv[1]
 
 installer_version_url = f'https://public.api.mindsdb.com/installer/{reltype}/docker___success___None'
 
-api_response = requests.get(installer_version_url)
+api_response = safe_requests.get(installer_version_url)
 
 if api_response.status_code != 200:
     exit(1)

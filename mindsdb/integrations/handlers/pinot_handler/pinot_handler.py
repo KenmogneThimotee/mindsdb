@@ -3,7 +3,6 @@ from collections import OrderedDict
 
 import pandas as pd
 import pinotdb
-import requests
 from requests.exceptions import InvalidSchema
 import json
 
@@ -21,6 +20,7 @@ from mindsdb.integrations.libs.response import (
     RESPONSE_TYPE
 )
 from mindsdb.integrations.libs.const import HANDLER_CONNECTION_ARG_TYPE as ARG_TYPE
+from security import safe_requests
 
 
 class PinotHandler(DatabaseHandler):
@@ -181,10 +181,10 @@ class PinotHandler(DatabaseHandler):
 
         api_url = f"{self.connection_data['host']}:{self.connection_data['controller_port']}/tables"
         try:
-            result = requests.get(api_url)
+            result = safe_requests.get(api_url)
         except InvalidSchema as e:
             api_url = f"{self.connection_data['scheme']}://{api_url}"
-            result = requests.get(api_url)
+            result = safe_requests.get(api_url)
 
         response = Response(
             RESPONSE_TYPE.TABLE,
@@ -207,10 +207,10 @@ class PinotHandler(DatabaseHandler):
 
         api_url = f"{self.connection_data['host']}:{self.connection_data['controller_port']}/tables/{table_name}/schema"
         try:
-            result = requests.get(api_url)
+            result = safe_requests.get(api_url)
         except InvalidSchema as e:
             api_url = f"{self.connection_data['scheme']}://{api_url}"
-            result = requests.get(api_url)
+            result = safe_requests.get(api_url)
 
         df = pd.DataFrame(json.loads(result.content)['dimensionFieldSpecs'])
         df = df.rename(columns={'name': 'column_name', 'dataType': 'data_type'})
