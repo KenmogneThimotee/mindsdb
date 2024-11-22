@@ -13,6 +13,7 @@ from mindsdb.api.http.utils import http_error, safe_extract
 from mindsdb.api.http.namespaces.configs.files import ns_conf
 from mindsdb.utilities.config import Config
 from mindsdb.utilities.context import context as ctx
+from security import safe_requests
 
 
 @ns_conf.route('/')
@@ -112,7 +113,7 @@ class File(Resource):
                         "File is too big",
                         "Upload limit for file is 100Mb"
                     )
-            with requests.get(url, stream=True) as r:
+            with safe_requests.get(url, stream=True) as r:
                 if r.status_code != 200:
                     return http_error(
                         400,

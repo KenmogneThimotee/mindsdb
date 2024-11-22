@@ -9,7 +9,6 @@ from urllib.parse import urlparse
 
        
 import magic
-import requests
 import pandas as pd
 from charset_normalizer import from_bytes
 
@@ -24,6 +23,7 @@ from mindsdb.integrations.libs.response import (
     HandlerResponse as Response,
     RESPONSE_TYPE
 )
+from security import safe_requests
 
 
 def clean_row(row):
@@ -274,7 +274,7 @@ class FileHandler(DatabaseHandler):
     def _fetch_url(url: str) -> str:
         temp_dir = tempfile.mkdtemp(prefix='mindsdb_file_url_')
         try:
-            r = requests.get(url, stream=True)
+            r = safe_requests.get(url, stream=True)
             if r.status_code == 200:
                 with open(os.path.join(temp_dir, 'file'), 'wb') as f:
                     for chunk in r:
