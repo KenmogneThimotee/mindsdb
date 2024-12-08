@@ -1,4 +1,3 @@
-import random
 import time
 import math
 
@@ -6,6 +5,7 @@ import openai
 import tiktoken
 
 import mindsdb.utilities.profiler as profiler
+import secrets
 
 
 def retry_with_exponential_backoff(
@@ -67,7 +67,7 @@ def retry_with_exponential_backoff(
                             f"Maximum number of retries ({max_retries}) exceeded."
                         )
                     # Increment the delay and wait
-                    delay *= exponential_base * (1 + jitter * random.random())
+                    delay *= exponential_base * (1 + jitter * secrets.SystemRandom().random())
                     time.sleep(delay)
 
                 except openai.error.OpenAIError as e:
