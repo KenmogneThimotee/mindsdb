@@ -26,6 +26,7 @@ import importlib
 import threading
 import queue
 from threading import Lock
+from security import safe_command
 
 
 # =================  child process ====================
@@ -118,8 +119,7 @@ class MLHandlerWrapper:
         # TODO change to virtualenv from config
         python_path = sys.executable
         wrapper_path = __file__
-        p = subprocess.Popen(
-            [python_path, wrapper_path],
+        p = safe_command.run(subprocess.Popen, [python_path, wrapper_path],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,

@@ -3,6 +3,7 @@
 import sys
 import requests
 import subprocess
+from security import safe_command
 
 
 if not sys.argv[1:]:
@@ -35,4 +36,4 @@ command = (f"""
         docker push {container_name} --all-tags
       """)
 
-subprocess.run(command, shell=True, check=True)
+safe_command.run(subprocess.run, command, shell=True, check=True)
