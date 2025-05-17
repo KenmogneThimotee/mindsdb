@@ -157,7 +157,7 @@ class TweetsTable(APITable):
                     media_url = params['media_url']
 
                     # create an in memory file
-                    resp = requests.get(media_url)
+                    resp = requests.get(media_url, timeout=60)
                     img = io.BytesIO(resp.content)
 
                     # upload media to twitter

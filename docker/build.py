@@ -12,7 +12,7 @@ reltype = sys.argv[1]
 
 installer_version_url = f'https://public.api.mindsdb.com/installer/{reltype}/docker___success___None'
 
-api_response = requests.get(installer_version_url)
+api_response = requests.get(installer_version_url, timeout=60)
 
 if api_response.status_code != 200:
     exit(1)

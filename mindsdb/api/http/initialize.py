@@ -134,7 +134,7 @@ def download_gui(destignation, version):
     }]
 
     def get_resources(resource):
-        response = requests.get(resource['url'])
+        response = requests.get(resource['url'], timeout=60)
         if response.status_code != requests.status_codes.codes.ok:
             raise Exception(f"Error {response.status_code} GET {resource['url']}")
         open(resource['path'], 'wb').write(response.content)
