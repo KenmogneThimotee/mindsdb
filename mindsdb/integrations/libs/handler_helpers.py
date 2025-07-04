@@ -5,6 +5,8 @@ from threading import Thread
 import requests
 
 from mindsdb.utilities.log import get_log
+from security import safe_requests
+
 logger = get_log(logger_name="main")
 
 
@@ -58,7 +60,7 @@ def registry(url, data, interval):
 def discover_services(url):
     res = None
     try:
-        res = requests.get(url, headers={"Content-Type": "application/json"})
+        res = safe_requests.get(url, headers={"Content-Type": "application/json"})
         res = res.json()
     except Exception as e:
         logger.error("service discover: unable to get handlers metadata. url - %s, error - %s", url, e)

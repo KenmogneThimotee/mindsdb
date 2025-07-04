@@ -11,6 +11,7 @@ from flask_restx import Resource
 from mindsdb.api.http.namespaces.configs.auth import ns_conf
 from mindsdb.utilities.config import Config
 from mindsdb.utilities.log import get_log
+from security import safe_requests
 
 
 log = get_log('http')
@@ -41,7 +42,7 @@ def request_user_info(access_token: str = None) -> dict:
 
     auth_server = Config()['auth']['oauth']['server_host']
 
-    response = requests.get(
+    response = safe_requests.get(
         f'https://{auth_server}/auth/userinfo',
         headers={
             'Authorization': f'Bearer {access_token}'

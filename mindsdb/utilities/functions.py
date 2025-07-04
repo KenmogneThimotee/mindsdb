@@ -5,6 +5,7 @@ from functools import wraps
 import requests
 
 from mindsdb.utilities.fs import create_process_mark, delete_process_mark
+from security import safe_requests
 
 
 def args_parse():
@@ -70,7 +71,7 @@ def get_versions_where_predictors_become_obsolete():
     versions_for_updating_predictors = []
     try:
         try:
-            res = requests.get(
+            res = safe_requests.get(
                 'https://mindsdb-cloud-public-service-files.s3.us-east-2.amazonaws.com/version_for_updating_predictors.txt',
                 timeout=0.5
             )

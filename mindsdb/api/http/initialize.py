@@ -27,6 +27,7 @@ from mindsdb.utilities.config import Config
 from mindsdb.utilities.log import get_log
 from mindsdb.interfaces.storage import db
 from mindsdb.utilities.json_encoder import CustomJSONEncoder
+from security import safe_requests
 
 
 class Swagger_Api(Api):
@@ -49,7 +50,7 @@ def get_last_compatible_gui_version() -> LooseVersion:
     logger = get_log('http')
 
     try:
-        res = requests.get('https://mindsdb-web-builds.s3.amazonaws.com/compatible-config.json', timeout=5)
+        res = safe_requests.get('https://mindsdb-web-builds.s3.amazonaws.com/compatible-config.json', timeout=5)
     except (ConnectionError, requests.exceptions.ConnectionError) as e:
         print(f'Is no connection. {e}')
         return False
@@ -134,7 +135,7 @@ def download_gui(destignation, version):
     }]
 
     def get_resources(resource):
-        response = requests.get(resource['url'])
+        response = safe_requests.get(resource['url'])
         if response.status_code != requests.status_codes.codes.ok:
             raise Exception(f"Error {response.status_code} GET {resource['url']}")
         open(resource['path'], 'wb').write(response.content)
